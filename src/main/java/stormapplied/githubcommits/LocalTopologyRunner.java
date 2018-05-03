@@ -1,5 +1,6 @@
 package stormapplied.githubcommits;
 
+
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.generated.StormTopology;
@@ -11,33 +12,33 @@ import stormapplied.githubcommits.topology.EmailCounter;
 import stormapplied.githubcommits.topology.EmailExtractor;
 
 public class LocalTopologyRunner {
-  private static final int TEN_MINUTES = 600000;
+    private static final int TEN_MINUTES = 6000;
 
-  public static void main(String[] args) {
-    TopologyBuilder builder = new TopologyBuilder();
+    public static void main(String[] args) {
+        TopologyBuilder builder = new TopologyBuilder();
 
-    builder.setSpout("commit-feed-listener", new CommitFeedListener());
+        builder.setSpout("commit-feed-listener", new CommitFeedListener());
 
-    builder
-        .setBolt("email-extractor", new EmailExtractor())
-        .shuffleGrouping("commit-feed-listener");
+        builder
+                .setBolt("email-extractor", new EmailExtractor())
+                .shuffleGrouping("commit-feed-listener");
 
-    builder
-        .setBolt("email-counter", new EmailCounter())
-        .fieldsGrouping("email-extractor", new Fields("email"));
+        builder
+                .setBolt("email-counter", new EmailCounter())
+                .fieldsGrouping("email-extractor", new Fields("email"));
 
-    Config config = new Config();
-    config.setDebug(true);
+        Config config = new Config();
+        config.setDebug(true);
 
-    StormTopology topology = builder.createTopology();
+        StormTopology topology = builder.createTopology();
 
-    LocalCluster cluster = new LocalCluster();
-    cluster.submitTopology("github-commit-count-topology",
-        config,
-        topology);
+        LocalCluster cluster = new LocalCluster();
+        cluster.submitTopology("github-commit-count-topology",
+                config,
+                topology);
 
-    Utils.sleep(TEN_MINUTES);
-    cluster.killTopology("github-commit-count-topology");
-    cluster.shutdown();
-  }
+        Utils.sleep(TEN_MINUTES);
+        cluster.killTopology("github-commit-count-topology");
+        cluster.shutdown();
+    }
 }
