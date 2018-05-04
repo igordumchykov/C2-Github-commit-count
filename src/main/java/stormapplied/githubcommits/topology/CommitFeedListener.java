@@ -7,6 +7,9 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import stormapplied.githubcommits.datasource.MockedQueue;
 
 import java.util.Map;
@@ -17,9 +20,14 @@ import java.util.Map;
  * 1) Reading a file containing commit data into a list of strings (one string per commit).
  * 2) When nextTuple() is called, emit a tuple for each string in the list.
  */
+@RequiredArgsConstructor
+@Component
 public class CommitFeedListener extends BaseRichSpout {
+
+    @Autowired
+    private MockedQueue queue;
+
     private SpoutOutputCollector outputCollector;
-    private MockedQueue queue = new MockedQueue();
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
