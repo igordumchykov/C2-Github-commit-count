@@ -1,13 +1,13 @@
 package stormapplied.githubcommits;
 
 
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.generated.StormTopology;
-import backtype.storm.topology.TopologyBuilder;
-import backtype.storm.tuple.Fields;
-import backtype.storm.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.generated.StormTopology;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ import stormapplied.githubcommits.topology.EmailExtractor;
 @SpringBootApplication
 public class LocalTopologyRunner implements CommandLineRunner {
 
-    private static final int TEN_MINUTES = 6000;
+    private static final int SLEEP_TIME = 3000;
 
     @Autowired
     private CommitFeedListener commitFeedListener;
@@ -59,7 +59,7 @@ public class LocalTopologyRunner implements CommandLineRunner {
                 config,
                 topology);
 
-        Utils.sleep(TEN_MINUTES);
+        Utils.sleep(SLEEP_TIME);
         cluster.killTopology("github-commit-count-topology");
         cluster.shutdown();
     }

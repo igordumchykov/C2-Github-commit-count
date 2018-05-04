@@ -1,8 +1,8 @@
 package stormapplied.githubcommits.datasource;
 
 
-import backtype.storm.utils.Utils;
-import org.apache.commons.io.IOUtils;
+import org.apache.storm.shade.org.apache.commons.io.IOUtils;
+import org.apache.storm.utils.Utils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
